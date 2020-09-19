@@ -5,15 +5,18 @@ from sly import Lexer
 class WannabeCLexer(Lexer):
     # Set of token names.   This is always required
     tokens = { 
-        NUMBER, ID, WHILE, IF, ELSE, PRINT,
-        PLUS, MINUS, MULT, DIVIDE, MODULO,
-        EQUALS, LT, LTOE, GT, GTOE, NOTEQ, 
-        ASSIGN, INCR, DECR, AND, OR, ADDASSIGN, 
-        SUBTASSIGN, MULTASSIGN, DIVASSIGN, 
-        MODASSIGN, RETURN, INT, VOID
+        NUMBER, ID, IF, ELSE, EQUALS, 
+        LTOE, GTOE, NOTEQ, INCR, DECR,
+        AND, OR, ADDASSIGN, SUBTASSIGN, 
+        MULTASSIGN, DIVASSIGN, MODASSIGN, 
+        RETURN, INT, VOID
     }
 
-    literals = { '(', ')', '{', '}', ';' }
+    literals = {
+        '(', ')', '{', '}', ';', 
+        '+', '-', '*', '/', '%', 
+        '<', '>', '='
+    }
 
     # String containing ignored characters
     ignore = ' \t'
@@ -25,22 +28,13 @@ class WannabeCLexer(Lexer):
     OR              = r'\|\|' 
     ADDASSIGN       = r'\+=' 
     SUBTASSIGN      = r'-=' 
-    MULTASSIGN      = r'\*=' 
+    MULTASSIGN      = r'\*='
     DIVASSIGN       = r'/=' 
-    MODASSIGN       = r'%='    
+    MODASSIGN       = r'%='
     EQUALS          = r'=='
     LTOE            = r'<='
     GTOE            = r'>='
     NOTEQ           = r'!='
-    
-    PLUS            = r'\+'
-    MINUS           = r'-'
-    MULT            = r'\*'
-    DIVIDE          = r'/'
-    MODULO          = r'%'
-    LT              = r'<'
-    GT              = r'>'
-    ASSIGN          = r'='
 
 
     @_(r'\d+')
@@ -52,8 +46,6 @@ class WannabeCLexer(Lexer):
     ID              = r'[a-zA-Z_][a-zA-Z0-9_]*'
     ID['if']        = IF
     ID['else']      = ELSE
-    ID['while']     = WHILE
-    ID['print']     = PRINT
     ID['return']    = RETURN
     ID['int']       = INT
     ID['void']      = VOID
