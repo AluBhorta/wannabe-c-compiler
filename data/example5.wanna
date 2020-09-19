@@ -1,0 +1,11 @@
+int foo()
+{
+  int a = 4;
+  int b = 3;
+  int c = 2;
+  
+  int x = (a+b) * c;
+  
+  return x;
+}
+# output: 14

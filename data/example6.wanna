@@ -1,0 +1,11 @@
+int foo()
+{
+  int a = 1;
+  int b = 2;
+  int tmp = a;
+  
+  a = b; b = tmp;
+  
+  return a;
+}
+# output: 2
