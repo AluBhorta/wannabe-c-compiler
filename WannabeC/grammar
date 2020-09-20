@@ -1,0 +1,102 @@
+
+%start function_definition
+
+
+function_definition
+	: type_specifier IDENTIFIER ( declarator_list )  compound_statement
+    
+type_specifier
+	: INT
+    | BOOLEAN
+    | VOID
+
+declarator_list
+	: declarator_list , declarator
+	| declarator
+	
+declarator
+    : type_specifier IDENTIFIER
+
+compound_statement
+	: { }
+	| { block_item_list }
+	
+block_item_list
+	: block_item
+	| block_item_list block_item
+
+block_item
+	: ';'
+	| expression ';'
+
+
+expression
+    : arithmetic_expression
+    | assignment_expression
+    | unary_expression
+    | boolean_expression
+    | conditional_expression
+    | return_expression
+
+
+arithmetic_expression
+    : arithmetic_expression + term
+    | arithmetic_expression - term
+    | term
+
+term
+    : term / factor
+    | term * factor
+    | term % factor
+    | factor
+
+factor
+    : NUMBER
+    | ( arithmetic_expression )
+
+
+assignment_expression
+	: declarator assignment_operator expression
+
+assignment_operator
+	: '='
+	| '*='
+	| '/='
+	| '%='
+	| '+='
+	| '-='
+
+
+return_expression
+    : RETURN expression
+    : RETURN
+
+
+unary_expression
+    : unary_operator IDENTIFIER
+    | IDENTIFIER unary_operator
+    | IDENTIFIER
+
+unary_operator
+    : '++'
+    | '--'
+
+
+boolean_expression
+    : expression boolean_operator expression
+    | unary_expression
+
+boolean_operator
+    : '==' 
+    | '&&' 
+    | '||' 
+    | '!=' 
+    | '=<' 
+    | '>='
+    | '<'
+    | '>' 
+
+
+conditional_expression
+    : IF ( boolean_expression ) expression ELSE expression
+	| IF ( boolean_expression ) expression

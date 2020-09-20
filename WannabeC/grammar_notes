@@ -1,0 +1,72 @@
+
+
+# arithmetic
+
+```
+expr       : expr + term
+           | expr - term
+           | term
+
+term        : term / factor
+            | term * factor
+            | term % factor
+            | factor
+
+factor      : NUMBER
+            | ( expr )
+```
+
+
+# if-else
+
+```
+E           : matched
+            | unmatched
+
+matched     : if matched else matched
+            | a
+            | b
+            | c
+
+unmatched   : if E
+            | if matched else unmatched
+```
+
+___
+
+# to handle
+
+arithmetic  : '+' '-' '*' '/' '%'
+if-else     : 'if' 'else'
+empty blocks: '{ }'
+
+
+assignment  : '=' '+=' '-=' '*=' '/=' '%='
+logical     : '==' '&&' '||' '!=' '=<' '>=' '<' '>' 
+unary       : '++' '--'
+brackets    : '(' ')' '{' '}'
+return      : 'return'
+
+___
+
+NOTE:
+
+expression
+:)	: arithmetic_expression     [+ - * / %]
+:)  | assignment_expression     ['int a = 2' 'a = b+c' 'a += 2+b/3']
+:)  | unary_expression          ['a++' '++a' 'a' 'b']
+~   | boolean_expression        ['_ boolean_operator _' ]
+~   | conditional_expression    []
+:)  | return_expression         []
+
+
+boolean_expression
+    a == b
+    a > b
+
+    a > b+3*c
+    a+3*b  < 23
+
+    a > b++     a++ > ++b
+
+    a++
