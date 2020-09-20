@@ -52,12 +52,12 @@ ___
 NOTE:
 
 expression
-:)	: arithmetic_expression     [+ - * / %]
-:)  | assignment_expression     ['int a = 2' 'a = b+c' 'a += 2+b/3']
-:)  | unary_expression          ['a++' '++a' 'a' 'b']
-~   | boolean_expression        ['_ boolean_operator _' ]
-~   | conditional_expression    []
-:)  | return_expression         []
+	: arithmetic_expression     [+ - * / %]
+    | assignment_expression     ['int a = 2' 'a = b+c' 'a += 2+b/3']
+    | unary_expression          ['a++' '++a' 'a' 'b']
+    | boolean_expression        ['_ boolean_operator _' ]
+    | conditional_expression    []
+    | return_expression         []
 
 
 boolean_expression
@@ -70,3 +70,4 @@ boolean_expression
     a > b++     a++ > ++b
 
     a++
+    a % 2 == 0
