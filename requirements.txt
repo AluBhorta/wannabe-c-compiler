@@ -1,0 +1,4 @@
+fire==0.3.1
+six==1.15.0
+sly==0.4
+termcolor==1.1.0

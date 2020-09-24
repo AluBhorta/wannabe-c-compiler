@@ -72,7 +72,7 @@ arithmetic_factor
 assignment_expression
     : declarator assignment_operator expression
 	| ID assignment_operator expression
-    | assignment_expression , assignment_expression
+~   | assignment_expression , assignment_expression
     ;
 
 assignment_operator
@@ -103,7 +103,7 @@ unary_operator
 
 boolean_expression
     : expression boolean_operator expression
-    | unary_expression
+~   | unary_expression
     ;
 
 boolean_operator
