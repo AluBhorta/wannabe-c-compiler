@@ -3,12 +3,11 @@
 
 
 function_definition
-	: type_specifier IDENTIFIER ( declarator_list ) block_body
+	: type_specifier ID ( declarator_list ) block_body
     ;
     
 type_specifier
 	: INT
-    | BOOLEAN
     | VOID
     ;
 
@@ -18,7 +17,12 @@ declarator_list
     ;
 	
 declarator
-    : type_specifier IDENTIFIER
+    : type_specifier ID
+    | empty
+    ;
+
+empty
+    : ""
     ;
 
 block_body
@@ -47,19 +51,19 @@ expression
 
 
 arithmetic_expression
-    : arithmetic_expression + term
-    | arithmetic_expression - term
-    | term
+    : arithmetic_expression + arithmetic_term
+    | arithmetic_expression - arithmetic_term
+    | arithmetic_term
     ;
 
-term
-    | term % factor
-    : term / factor
-    | term * factor
-    | factor
+arithmetic_term
+    | arithmetic_term % arithmetic_factor
+    : arithmetic_term / arithmetic_factor
+    | arithmetic_term * arithmetic_factor
+    | arithmetic_factor
     ;
 
-factor
+arithmetic_factor
     : NUMBER
     | ( arithmetic_expression )
     ;
@@ -67,7 +71,7 @@ factor
 
 assignment_expression
     : declarator assignment_operator expression
-	| IDENTIFIER assignment_operator expression
+	| ID assignment_operator expression
     | assignment_expression , assignment_expression
     ;
 
@@ -87,9 +91,9 @@ return_expression
 
 
 unary_expression
-    : unary_operator IDENTIFIER
-    | IDENTIFIER unary_operator
-    | IDENTIFIER
+    : unary_operator ID
+    | ID unary_operator
+    | ID
     ;
 
 unary_operator

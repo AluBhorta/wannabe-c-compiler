@@ -1,23 +1,30 @@
 
+# Wannabe C Compiler
 
-# arithmetic
+A compiler that parses limited c-language like functions.
 
+Written in python using the [SLY](https://sly.readthedocs.io/en/latest/sly.html) library.
+
+## Usage
+
+Requires Python >= 3.6
+
+
+## Notes
+
+#### operators to handle
 ```
-expr       : expr + term
-           | expr - term
-           | term
-
-term        : term / factor
-            | term * factor
-            | term % factor
-            | factor
-
-factor      : NUMBER
-            | ( expr )
+arithmetic  : '+' '-' '*' '/' '%'
+if-else     : 'if' 'else'
+empty blocks: '{ }'
+assignment  : '=' '+=' '-=' '*=' '/=' '%='
+logical     : '==' '&&' '||' '!=' '=<' '>=' '<' '>' 
+unary       : '++' '--'
+brackets    : '(' ')' '{' '}'
+return      : 'return'
 ```
 
-
-# if-else
+#### if-else
 
 ```
 E           : matched
@@ -32,34 +39,18 @@ unmatched   : if E
             | if matched else unmatched
 ```
 
-___
-
-# to handle
-
-arithmetic  : '+' '-' '*' '/' '%'
-if-else     : 'if' 'else'
-empty blocks: '{ }'
-
-
-assignment  : '=' '+=' '-=' '*=' '/=' '%='
-logical     : '==' '&&' '||' '!=' '=<' '>=' '<' '>' 
-unary       : '++' '--'
-brackets    : '(' ')' '{' '}'
-return      : 'return'
-
-___
-
-NOTE:
-
+```
 expression
-	: arithmetic_expression     [+ - * / %]
+    : arithmetic_expression     [+ - * / %]
     | assignment_expression     ['int a = 2' 'a = b+c' 'a += 2+b/3']
     | unary_expression          ['a++' '++a' 'a' 'b']
     | boolean_expression        ['_ boolean_operator _' ]
     | conditional_expression    []
     | return_expression         []
+```
 
 
+```
 boolean_expression
     a == b
     a > b
@@ -71,3 +62,4 @@ boolean_expression
 
     a++
     a % 2 == 0
+```

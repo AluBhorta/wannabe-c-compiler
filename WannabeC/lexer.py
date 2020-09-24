@@ -15,22 +15,24 @@ class WannabeCLexer(Lexer):
     literals = {
         '(', ')', '{', '}', ';', 
         '+', '-', '*', '/', '%', 
-        '<', '>', '='
+        '<', '>', '=', ','
     }
 
     # String containing ignored characters
     ignore = ' \t'
 
     # Regular expression rules for tokens
-    INCR            = r'\+\+' 
-    DECR            = r'--' 
-    AND             = r'&&' 
-    OR              = r'\|\|' 
-    ADDASSIGN       = r'\+=' 
+    INCR            = r'\+\+'
+    DECR            = r'--'
+    
+    ADDASSIGN       = r'\+='
     SUBTASSIGN      = r'-=' 
     MULTASSIGN      = r'\*='
     DIVASSIGN       = r'/=' 
     MODASSIGN       = r'%='
+    
+    AND             = r'&&'
+    OR              = r'\|\|'
     EQUALS          = r'=='
     LTOE            = r'<='
     GTOE            = r'>='
@@ -49,6 +51,7 @@ class WannabeCLexer(Lexer):
     ID['return']    = RETURN
     ID['int']       = INT
     ID['void']      = VOID
+
 
     ignore_comment = r'\#.*'
 
