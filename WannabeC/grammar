@@ -6,6 +6,7 @@ start
 expression
     : print arithmetic_expression
     | arithmetic_expression
+    | boolean_expression
     ;
 
 arithmetic_expression
@@ -24,4 +25,19 @@ arithmetic_term
 arithmetic_factor
     : NUMBER
     | ( arithmetic_expression )
+    ;
+
+boolean_expression
+    : arithmetic_expression boolean_operator arithmetic_expression
+    ;
+
+boolean_operator
+    : '==' 
+    | '&&'
+    | '||' 
+    | '!=' 
+    | '=<' 
+    | '>='
+    | '<'
+    | '>' 
     ;

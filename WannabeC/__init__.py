@@ -6,6 +6,13 @@ from WannabeC.parser import WannabeCParser
 
 
 class WannabeCCompiler:
+    def __init__(self, file=None):
+        if file:
+            self.parse_file(file)
+        else:
+            self.interpreter()
+        exit(0)
+
     def _file_to_tokens(self, filename):
         with open(filename) as f:
             text = f.read()
@@ -22,13 +29,13 @@ class WannabeCCompiler:
         tokens = self._file_to_tokens(filename)
         tokens = list(tokens)
 
-        print("\nTokens")
+        print("\nTokens 🎟️")
         pprint(tokens)
         print()
 
         parser = WannabeCParser()
         result = parser.parse(iter(tokens))
-        print("\nParse result: ", result)
+        print("\nParse result 👉 ", result)
 
     def interpreter(self):
         lexer = WannabeCLexer()
@@ -36,10 +43,11 @@ class WannabeCCompiler:
 
         while True:
             try:
-                text = input('⊃( ͡° ͜ʖ ͡°)⊃━☆*・ﾟ > ')
+                text = input('⊃(ᴗ ͜ʖ ᴗ)⊃━☆*✨ > ')
                 if text:
                     result = parser.parse(lexer.tokenize(text))
-                    print(result)
+                    if result != None:
+                        print(result)
             except KeyboardInterrupt:
                 print("Bye 👋...")
                 break
