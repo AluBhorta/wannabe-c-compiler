@@ -16,6 +16,8 @@ class WannabeCParser(Parser):
         ('left', '*', '/', '%'),
     )
 
+    _variables = dict()
+
     @_('line_list')
     def start(self, p):
         return p.line_list
@@ -33,6 +35,8 @@ class WannabeCParser(Parser):
     @_(
         'print_expression',
         'conditional_expression',
+        'assignment_expression',
+        'arithmetic_expression',
     )
     def line_item(self, p):
         return p[0]
@@ -80,14 +84,20 @@ class WannabeCParser(Parser):
             return p.arithmetic_factor
 
     @_(
+        'ID',
         'NUMBER',
         '"(" arithmetic_expression ")"',
     )
     def arithmetic_factor(self, p):
         try:
-            return p.NUMBER
+            if hasattr(p, 'NUMBER'):
+                return p.NUMBER
+            else:
+                return self._variables[p.ID]
         except AttributeError:
             return p.arithmetic_expression
+        except KeyError:
+            return f"ERROR! No variables named: {p.ID}"
 
     @_('arithmetic_expression boolean_operator arithmetic_expression')
     def boolean_expression(self, p):
@@ -139,7 +149,28 @@ class WannabeCParser(Parser):
     def other_conditional(self, p):
         return p[0]
 
+    @_('INT', 'VOID')
+    def type_specifier(self, p):
+        return p[0]
+
+    @_(
+        'type_specifier ID assignment_operator arithmetic_expression',
+        'ID assignment_operator arithmetic_expression',
+    )
+    def assignment_expression(self, p):
+        try:
+            if p.type_specifier == 'void':
+                return "ERROR! Invalid type 'void' for assignment"
+        except AttributeError:
+            pass
+        self._variables[p.ID] = p.arithmetic_expression
+
+    @_('"="')
+    def assignment_operator(self, p):
+        return p[0]
+
     """  """
+    #     pass
     # @_('_RHS')
     # def _LHS(self, p):
     #     pass

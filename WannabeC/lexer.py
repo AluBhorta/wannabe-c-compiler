@@ -6,11 +6,11 @@ class WannabeCLexer(Lexer):
     tokens = {
         NUMBER, PRINT, ID, IF, ELSE,
         AND, OR, EQUALS, LTOE, GTOE, 
-        NOTEQ, LT, GT, 
+        NOTEQ, LT, GT, INT, VOID,
     }
 
     literals = {
-        '+', '-', '*', '/', '%', '(', ')', ';'
+        '+', '-', '*', '/', '%', '(', ')', ';', '='
     }
     
     AND             = r'&&'
@@ -26,6 +26,8 @@ class WannabeCLexer(Lexer):
     ID['if']        = IF
     ID['else']      = ELSE
     ID['print']     = PRINT
+    ID['int']       = INT
+    ID['void']      = VOID
 
     @_(r'\d+')
     def NUMBER(self, t):

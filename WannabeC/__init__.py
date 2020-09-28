@@ -47,7 +47,7 @@ class WannabeCCompiler:
                 if text:
                     result = parser.parse(lexer.tokenize(text))
                     if result != None:
-                        print(result)
+                        [print(r) for r in result if r]    
             except KeyboardInterrupt:
                 print("Bye 👋...")
                 break

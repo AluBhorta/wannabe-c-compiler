@@ -62,3 +62,19 @@ unmatched_conditional
     : IF ( boolean_expression ) conditional_expression
     | IF ( boolean_expression ) matched_conditional ELSE unmatched_conditional
     ;
+
+
+type_specifier
+	: INT
+    | VOID
+    ;
+
+
+assignment_expression
+    : type_specifier ID assignment_operator arithmetic_expression
+	| ID assignment_operator arithmetic_expression
+    ;
+
+assignment_operator
+	: '='
+    ;
