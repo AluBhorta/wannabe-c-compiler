@@ -85,7 +85,8 @@ assignment_operator
     ;
 
 return_expression
-    : RETURN expression
+    : RETURN arithmetic_expression
+    : RETURN unary_expression
     : RETURN
     ;
 

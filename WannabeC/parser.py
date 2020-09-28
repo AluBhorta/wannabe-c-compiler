@@ -9,13 +9,11 @@ class WannabeCParser(Parser):
 
     _variables = dict()
 
-    # Get the token list from the lexer (required)
     tokens = WannabeCLexer.tokens
 
-    # Grammar rules and actions
     @_('type_specifier ID "(" declarator_list ")" block_body')
     def function_definition(self, p):
-        if p.type_specifier == 'INT':
+        if p.type_specifier == 'int':
             return p.block_body
         return
     
@@ -50,9 +48,12 @@ class WannabeCParser(Parser):
     def block_body(self, p):
         try:
             if p.block_item_list:
-                return p.block_item_list
+                for bi in p.block_item_list:
+                    if bi[0] == 'RETURN':
+                        return bi[1]
+            return
         except AttributeError:
-            pass
+            return
         
     @_(
         'block_item', 
@@ -69,7 +70,7 @@ class WannabeCParser(Parser):
     def block_item(self, p):
         try:
             if p.expression:
-                print(p.expression)
+                # print(p.expression)
                 return p.expression
         except AttributeError:
             pass
@@ -99,9 +100,18 @@ class WannabeCParser(Parser):
                     return p.arithmetic_expression - p.arithmetic_term
                 else:
                     raise Exception(f"Invalid arithmetic_expression operator {p[1]}")
-                # return 'ZERO' if r == 0 else r
         except AttributeError:
             return (p.arithmetic_term)
+
+    # @_(
+    #     'ID "+" ID', 
+    #     'ID "-" ID', 
+    # )
+    # def arithmetic_expression(self, p):
+    #     if p[1] == '+':
+    #         return self._variables[p[0]] + self._variables[p[2]]
+    #     else:
+    #         return self._variables[p[0]] - self._variables[p[2]]
 
     @_(
         'arithmetic_term "%" arithmetic_factor',
@@ -116,30 +126,50 @@ class WannabeCParser(Parser):
         except AttributeError:
             return (p.arithmetic_factor)
 
-    @_('NUMBER', '"(" arithmetic_expression ")"')
+    # @_(
+    #     'ID "%" ID',
+    #     'ID "/" ID',
+    #     'ID "*" ID',
+    # )
+    # def arithmetic_term(self, p):
+    #     if p[1] == '%':
+    #         return self._variables[p[0]] % self._variables[p[2]]
+    #     elif p[1] == '/':
+    #         return self._variables[p[0]] / self._variables[p[2]]
+    #     elif p[1] == '*':
+    #         return self._variables[p[0]] * self._variables[p[2]]
+    #     else:
+    #         raise Exception(f"Invalid operator {p[1]}!")
+
+
+    @_(
+        'NUMBER',
+        'ID',
+        '"(" arithmetic_expression ")"'
+    )
     def arithmetic_factor(self, p):
         try:
-            if p.arithmetic_expression:
-                return p.arithmetic_expression
+            return p.arithmetic_expression
         except AttributeError:
             return int(p.NUMBER)
-    
+        else:
+            return self._variables[p.ID]
+
     @_(
         'declarator assignment_operator expression',
         'ID assignment_operator expression',
     )
     def assignment_expression(self, p):
         try:
+            self._variables[p.declarator[1]] = p.expression
             if p.declarator:
                 return (p.declarator, p.assignment_operator, p.expression)
         except AttributeError:
+            self._variables[p.ID] = p.expression
             return (p.ID, p.assignment_operator, p.expression)
     
-    # @_('assignment_expression "," assignment_expression',)
-    # def assignment_expression(self, p):
-    #     pass
-    
     @_(
+        '"="',
         'ADDASSIGN',
         'SUBTASSIGN',
         'MULTASSIGN',
@@ -150,13 +180,13 @@ class WannabeCParser(Parser):
         return p[0]
     
     @_(
-        'RETURN expression',
+        'RETURN arithmetic_expression',
+        'RETURN unary_expression',
         'RETURN',
     )
     def return_expression(self, p):
         try:
-            if p.expression != None:
-                return p.expression
+            return ('RETURN', p[1])
         except AttributeError:
             return
     
