@@ -1,54 +1,12 @@
 
-%start function_definition
-
-
-function_definition
-	: type_specifier ID ( declarator_list ) block_body
-    ;
-    
-type_specifier
-	: INT
-    | VOID
-    ;
-
-declarator_list
-	: declarator_list , declarator
-	| declarator
-    ;
-	
-declarator
-    : type_specifier ID
-    | empty
-    ;
-
-empty
-    : ""
-    ;
-
-block_body
-	: { }
-	| { block_item_list }
-    ;
-	
-block_item_list
-	: block_item
-	| block_item_list block_item
-    ;
-
-block_item
-	: ';'
-	| expression ';'
+start
+    : expression
     ;
 
 expression
-    : arithmetic_expression
-    | assignment_expression
-    | unary_expression
-    | boolean_expression
-    | conditional_expression
-    | return_expression
+    : print arithmetic_expression
+    | arithmetic_expression
     ;
-
 
 arithmetic_expression
     : arithmetic_expression + arithmetic_term
@@ -66,59 +24,4 @@ arithmetic_term
 arithmetic_factor
     : NUMBER
     | ( arithmetic_expression )
-    ;
-
-
-assignment_expression
-    : declarator assignment_operator expression
-	| ID assignment_operator expression
-~   | assignment_expression , assignment_expression
-    ;
-
-assignment_operator
-	: '='
-	| '-='
-	| '+='
-	| '%='
-	| '/='
-	| '*='
-    ;
-
-return_expression
-    : RETURN arithmetic_expression
-    : RETURN unary_expression
-    : RETURN
-    ;
-
-
-unary_expression
-    : unary_operator ID
-    | ID unary_operator
-    | ID
-    ;
-
-unary_operator
-    : '++'
-    | '--'
-    ;
-
-boolean_expression
-    : expression boolean_operator expression
-~   | unary_expression
-    ;
-
-boolean_operator
-    : '==' 
-    | '&&'
-    | '||' 
-    | '!=' 
-    | '=<' 
-    | '>='
-    | '<'
-    | '>' 
-    ;
-
-conditional_expression
-    : IF ( boolean_expression ) expression ELSE expression
-	| IF ( boolean_expression ) expression
     ;

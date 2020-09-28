@@ -1,32 +1,22 @@
+import readline
 from pprint import pprint
 
 from WannabeC.lexer import WannabeCLexer
 from WannabeC.parser import WannabeCParser
 
+
 class WannabeCCompiler:
     def _file_to_tokens(self, filename):
         with open(filename) as f:
             text = f.read()
-            
+
             lexer = WannabeCLexer()
             return lexer.tokenize(text)
 
-    def run_lexer(self, filename):
+    def tokenize_file(self, filename):
         tokens = self._file_to_tokens(filename)
-        for tok in tokens:
+        for tok in tokenrun_lexers:
             print("\t", tok)
-
-    def run_parser(self):
-        lexer = WannabeCLexer()
-        parser = WannabeCParser()
-
-        while True:
-            try:
-                text = input('wanna > ')
-                result = parser.parse(lexer.tokenize(text))
-                print(result)
-            except EOFError:
-                break
 
     def parse_file(self, filename):
         tokens = self._file_to_tokens(filename)
@@ -40,4 +30,16 @@ class WannabeCCompiler:
         result = parser.parse(iter(tokens))
         print("\nParse result: ", result)
 
+    def interpreter(self):
+        lexer = WannabeCLexer()
+        parser = WannabeCParser()
 
+        while True:
+            try:
+                text = input('⊃( ͡° ͜ʖ ͡°)⊃━☆*・ﾟ > ')
+                if text:
+                    result = parser.parse(lexer.tokenize(text))
+                    print(result)
+            except KeyboardInterrupt:
+                print("Bye 👋...")
+                break

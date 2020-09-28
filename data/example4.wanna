@@ -5,4 +5,4 @@ int foo()
   
   return a*b;
 }
-# output: 6
+// output: 6

@@ -8,4 +8,4 @@ int foo()
   
   return a;
 }
-# output: 2
+// output: 2

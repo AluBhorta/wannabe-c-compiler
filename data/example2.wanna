@@ -2,4 +2,3 @@ int foo()
 {
   return 1;
 }
-# output:1
