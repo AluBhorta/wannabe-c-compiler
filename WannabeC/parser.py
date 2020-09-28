@@ -16,24 +16,33 @@ class WannabeCParser(Parser):
         ('left', '*', '/', '%'),
     )
 
-    @_('expression')
+    @_('line_list')
     def start(self, p):
-        return p.expression
+        return p.line_list
+
+    @_(
+        'line_list line_item ";"',
+        'line_item ";"',
+    )
+    def line_list(self, p):
+        try:
+            return [*p.line_list, p.line_item]
+        except AttributeError:
+            return [p.line_item]
 
     @_(
         'print_expression',
-        'arithmetic_expression',
-        'boolean_expression'
+        'conditional_expression',
     )
-    def expression(self, p):
+    def line_item(self, p):
         return p[0]
 
     @_(
-        'PRINT expression',
+        'PRINT arithmetic_expression',
+        'PRINT boolean_expression',
     )
     def print_expression(self, p):
-        print(p.expression)
-        return None
+        return p[1]
 
     @_(
         'arithmetic_expression "+" arithmetic_term',
@@ -95,6 +104,39 @@ class WannabeCParser(Parser):
 
     @_("AND", "OR", "EQUALS", "LTOE", "GTOE", "NOTEQ", "LT", "GT")
     def boolean_operator(self, p):
+        return p[0]
+
+    @_('matched_conditional', 'unmatched_conditional')
+    def conditional_expression(self, p):
+        return p[0]
+
+    @_(
+        'IF "(" boolean_expression ")" matched_conditional ELSE matched_conditional',
+        'other_conditional',
+    )
+    def matched_conditional(self, p):
+        try:
+            if p.boolean_expression == True:
+                return p.matched_conditional0
+            return p.matched_conditional1
+        except AttributeError:
+            return p[0]
+
+    @_(
+        'IF "(" boolean_expression ")" conditional_expression',
+        'IF "(" boolean_expression ")" matched_conditional ELSE unmatched_conditional',
+    )
+    def unmatched_conditional(self, p):
+        try:
+            return p.matched_conditional if p.boolean_expression else p.unmatched_conditional
+        except AttributeError:
+            if p.boolean_expression:
+                return p.conditional_expression
+
+    @_(
+        'print_expression'
+    )
+    def other_conditional(self, p):
         return p[0]
 
     """  """

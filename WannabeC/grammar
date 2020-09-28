@@ -1,12 +1,20 @@
 
 start
-    : expression
+    : line_list
     ;
 
-expression
-    : print arithmetic_expression
-    | arithmetic_expression
-    | boolean_expression
+line_list
+    : line_list line_item
+    | line_item ";"
+    ;
+
+line_item
+    : print_expression
+    | conditional_expression
+    ;
+
+print_expression
+    : PRINT expression
     ;
 
 arithmetic_expression
@@ -40,4 +48,17 @@ boolean_operator
     | '>='
     | '<'
     | '>' 
+    ;
+
+conditional_expression
+    : matched_conditional
+    | unmatched_conditional
+
+matched_conditional
+    : IF ( boolean_expression ) matched_conditional ELSE matched_conditional
+    | print_expression
+
+unmatched_conditional
+    : IF ( boolean_expression ) conditional_expression
+    | IF ( boolean_expression ) matched_conditional ELSE unmatched_conditional
     ;
