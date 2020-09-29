@@ -7,11 +7,10 @@ from .lexer import WannabeCLexer
 
 class WannabeCParser(Parser):
     debugfile = "parser-debug2.log"
-    # start = 'start'
-
     tokens = WannabeCLexer.tokens
 
     precedence = (
+        ('right', 'THEN'),
         ('left', '+', '-'),
         ('left', '*', '/', '%'),
     )
@@ -33,8 +32,8 @@ class WannabeCParser(Parser):
             return
 
     @_(
-        'line_list line_item ";"',
-        'line_item ";"',
+        'line_list line_item',
+        'line_item',
     )
     def line_list(self, p):
         try:
@@ -43,13 +42,24 @@ class WannabeCParser(Parser):
             return [p.line_item]
 
     @_(
-        'print_expression',
-        'conditional_expression',
-        'assignment_expression',
-        'arithmetic_expression',
+        'print_expression ";"',
+        'conditional_expression ";"',
+        'assignment_expression ";"',
+        'arithmetic_expression ";"',
+        'return_expression ";"',
     )
     def line_item(self, p):
         return p[0]
+
+    @_(
+        'RETURN',
+        'RETURN arithmetic_expression',
+    )
+    def return_expression(self, p):
+        try:
+            return p[1]
+        except IndexError:
+            return
 
     @_(
         'PRINT arithmetic_expression',
@@ -132,6 +142,7 @@ class WannabeCParser(Parser):
 
     @_(
         'IF "(" boolean_expression ")" matched_conditional ELSE matched_conditional',
+        '"{" other_conditional "}"',
         'other_conditional',
     )
     def matched_conditional(self, p):
@@ -140,7 +151,7 @@ class WannabeCParser(Parser):
                 return p.matched_conditional0
             return p.matched_conditional1
         except AttributeError:
-            return p[0]
+            return p.other_conditional
 
     @_(
         'IF "(" boolean_expression ")" conditional_expression',
@@ -154,7 +165,9 @@ class WannabeCParser(Parser):
                 return p.conditional_expression
 
     @_(
-        'print_expression'
+        'print_expression %prec THEN',
+        'return_expression %prec THEN',
+        'assignment_expression %prec THEN',
     )
     def other_conditional(self, p):
         return p[0]
@@ -178,9 +191,3 @@ class WannabeCParser(Parser):
     @_('"="')
     def assignment_operator(self, p):
         return p[0]
-
-    """  """
-    #     pass
-    # @_('_RHS')
-    # def _LHS(self, p):
-    #     pass
