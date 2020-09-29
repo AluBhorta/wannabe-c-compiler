@@ -1,6 +1,11 @@
 
 start
     : line_list
+    | function_definition
+    ;
+
+function_definition
+	: type_specifier ID ( ) line_list
     ;
 
 line_list

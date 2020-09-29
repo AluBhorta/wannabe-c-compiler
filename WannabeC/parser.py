@@ -18,9 +18,19 @@ class WannabeCParser(Parser):
 
     _variables = dict()
 
-    @_('line_list')
+    @_('function_definition', 'line_list')
     def start(self, p):
-        return p.line_list
+        return p[0]
+
+    @_(
+        'type_specifier ID "(" ")" "{" line_list "}"',
+        'type_specifier ID "(" ")" "{" "}"',
+    )
+    def function_definition(self, p):
+        try:
+            return p.line_list
+        except AttributeError:
+            return
 
     @_(
         'line_list line_item ";"',

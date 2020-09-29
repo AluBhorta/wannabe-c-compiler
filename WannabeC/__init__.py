@@ -29,13 +29,13 @@ class WannabeCCompiler:
         tokens = self._file_to_tokens(filename)
         tokens = list(tokens)
 
-        print("\nTokens 🎟️")
-        pprint(tokens)
-        print()
+        # print("\nTokens 🎟️")  # you can uncomment this to view the tokens being generated
+        # pprint(tokens)
+        # print()
 
         parser = WannabeCParser()
         result = parser.parse(iter(tokens))
-        print("\nParse result 👉 ", result)
+        print("\n👉 ", result)
 
     def interpreter(self):
         lexer = WannabeCLexer()
@@ -47,7 +47,7 @@ class WannabeCCompiler:
                 if text:
                     result = parser.parse(lexer.tokenize(text))
                     if result != None:
-                        [print(r) for r in result if r]    
+                        [print("👉 ",r) for r in result if r]    
             except KeyboardInterrupt:
                 print("Bye 👋...")
                 break
