@@ -5,16 +5,14 @@ from .lexer import WannabeCLexer
 
 
 class WannabeCParser(Parser):
-    debugfile = "parser-debug2.log"
     tokens = WannabeCLexer.tokens
-
     precedence = (
         ('right', 'THEN'),
         ('left', '+', '-'),
         ('left', '*', '/', '%'),
     )
-
     _variables = dict()
+    debugfile = "parser-debug.log"
 
     @_('function_definition', 'line_list')
     def start(self, p):
@@ -26,7 +24,29 @@ class WannabeCParser(Parser):
     )
     def function_definition(self, p):
         try:
-            return p.line_list
+            return_vals = []
+            if p.type_specifier == 'int':
+                for item in p.line_list:
+                    if isinstance(item, tuple) and item[0] == 'RETURN':
+                        if isinstance(item[1], int):
+                            return_vals.append(item[1])
+                        else:
+                            return_vals.append(
+                                "ERROR! Invalid return type for 'int'!")
+                        break
+                    else:
+                        return_vals.append(item)
+                return return_vals
+
+            if p.type_specifier == 'void':
+                for item in p.line_list:
+                    if isinstance(item, tuple) and item[0] == 'RETURN':
+                        if len(item) > 1:
+                            return ["ERROR! Type 'void' cannot have return values!"]
+                        break
+                    else:
+                        return_vals.append(item)
+                return return_vals
         except AttributeError:
             return []
 
@@ -56,9 +76,9 @@ class WannabeCParser(Parser):
     )
     def return_expression(self, p):
         try:
-            return p[1]
+            return ('RETURN', p[1])
         except IndexError:
-            return
+            return ('RETURN',)
 
     @_(
         'PRINT arithmetic_expression',
