@@ -1,5 +1,4 @@
 
-from pprint import pprint
 from sly import Parser
 
 from .lexer import WannabeCLexer
@@ -29,7 +28,7 @@ class WannabeCParser(Parser):
         try:
             return p.line_list
         except AttributeError:
-            return
+            return []
 
     @_(
         'line_list line_item',
@@ -182,11 +181,15 @@ class WannabeCParser(Parser):
     )
     def assignment_expression(self, p):
         try:
+            if not hasattr(p, 'type_specifier') and p.ID not in self._variables.keys():
+                return f"ERROR! Type required for '{p.ID}'. (Not really, but let's just pretend it's C 🤷)"
             if p.type_specifier == 'void':
                 return "ERROR! Invalid type 'void' for assignment"
+            if hasattr(p, 'type_specifier') and p.ID in self._variables.keys():
+                return f"ERROR! Variable '{p.ID}' already defined"
+            self._variables[p.ID] = p.arithmetic_expression
         except AttributeError:
             pass
-        self._variables[p.ID] = p.arithmetic_expression
 
     @_('"="')
     def assignment_operator(self, p):
